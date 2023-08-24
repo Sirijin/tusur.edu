@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20232208-add_table_task.xml-1" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="task"/>
+            </not>
+        </preConditions>
+
+        <comment>create table task</comment>
+
+        <createTable tableName="task">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="add_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_difficulty_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_task.xml-2" author="mokrovitskii">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="task" foreignKeyName="fk_task_category_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on role_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_task_category_id"
+                                 baseTableName="task"
+                                 baseColumnNames="task_category_id"
+                                 referencedTableName="task_category"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    
+    <changeSet id="20232208-add_table_task.xml-3" author="mokrovitskii">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="task" foreignKeyName="fk_task_difficulty_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on role_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_task_difficulty_id"
+                                 baseTableName="task"
+                                 baseColumnNames="task_difficulty_id"
+                                 referencedTableName="task_difficulty"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

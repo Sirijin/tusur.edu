@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20232208-add_table_user.xml-1" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
+
+        <comment>create table user</comment>
+
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="role_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(32)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(32)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthday" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="daily_activity" type="float" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="days_in_a_row" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_user.xml-2" author="mokrovitskii">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="user" foreignKeyName="fk_user_role_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on role_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_user_role_id"
+                                 baseTableName="user"
+                                 baseColumnNames="role_id"
+                                 referencedTableName="role"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_user.xml-3" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.user
+                WHERE username = 'admin';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert first admin</comment>
+
+        <insert tableName="user">
+            <column name="email" value="pochta254@gmail.com"/>
+            <column name="role_id" value="1"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$12$WCS4NJlC4gKQw9t5KDuVaOdm5PhvRwOx8ZXDQ5fHPjohlYRhsOfTC"/>
+            <column name="first_name" value="Админ"/>
+            <column name="middle_name" value="Админович"/>
+            <column name="last_name" value="Админов"/>
+            <column name="birthday" value="2000.01.01"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_user.xml-4" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.user
+                WHERE username = 'user';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert first user</comment>
+
+        <insert tableName="user">
+            <column name="email" value="test@gmail.com"/>
+            <column name="role_id" value="2"/>
+            <column name="username" value="user"/>
+            <column name="password" value="$2a$12$S1Znr9WMFyh9MXuHB7N.DeeBJmO40ejLT0HgQ.6pvWeuTz/nHyeiW"/>
+            <column name="first_name" value="Юзер"/>
+            <column name="middle_name" value="Юзерович"/>
+            <column name="last_name" value="Юзеров"/>
+            <column name="birthday" value="2000.01.01"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

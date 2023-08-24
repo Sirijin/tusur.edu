@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20232208-add_table_user_task.xml-1" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_task"/>
+            </not>
+        </preConditions>
+
+        <comment>create table user_task</comment>
+
+        <createTable tableName="user_task">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="task_id" type="bigint">
+                <constraints unique="false" nullable="false"/>
+            </column>
+            <column name="complete_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="is_started" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_finished" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_user_task.xml-2" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="user_task" foreignKeyName="fk_user_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on user_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_user_id"
+                                 baseTableName="user_task"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_user_task.xml-3" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="user_task" foreignKeyName="fk_task_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on task_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_task_id"
+                                 baseTableName="user_task"
+                                 baseColumnNames="task_id"
+                                 referencedTableName="task"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

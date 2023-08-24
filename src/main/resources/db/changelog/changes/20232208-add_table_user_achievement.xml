@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20232208-add_table_user_achievement.xml-1" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_achievement"/>
+            </not>
+        </preConditions>
+
+        <comment>create table user_achievement</comment>
+
+        <createTable tableName="user_achievement">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="achievement_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receive_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_user_achievement.xml-2" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="user_achievement" foreignKeyName="fk_user_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on user_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_user_id"
+                                 baseTableName="user_achievement"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_user_achievement.xml-3" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="user_achievement" foreignKeyName="fk_achievement_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on achievement_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_achievement_id"
+                                 baseTableName="user_achievement"
+                                 baseColumnNames="achievement_id"
+                                 referencedTableName="achievement"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
