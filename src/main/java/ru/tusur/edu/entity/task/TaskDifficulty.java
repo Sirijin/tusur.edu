@@ -12,6 +12,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Table(name = "task_difficulty")
 public class TaskDifficulty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

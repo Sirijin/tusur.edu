@@ -1,22 +1,18 @@
 package ru.tusur.edu.entity.achievement;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
-import ru.tusur.edu.security.entity.User;
 
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Builder(toBuilder = true)
+@AllArgsConstructor
 public class Achievement {
 
     @Id

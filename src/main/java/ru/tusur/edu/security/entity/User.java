@@ -1,10 +1,12 @@
 package ru.tusur.edu.security.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,10 +19,12 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@ToString(exclude = {"role", "userTask", "userAchievement"})
+@ToString(exclude = {"role"})
 @RequiredArgsConstructor
 @Entity
 @Table(name = "user", schema = "public")
+@Builder(toBuilder = true)
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -47,16 +51,19 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(name = "birthday", nullable = false)
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     private LocalDate birthday;
 
     @Column(name = "balance", nullable = false)
-    private Long balance;
+    private Integer balance;
 
     @Column(name = "daily_activity", nullable = false)
     private Double dailyActivity;
 
     @Column(name = "days_in_a_row", nullable = false)
-    private Long daysInARow;
+    private Integer daysInARow;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

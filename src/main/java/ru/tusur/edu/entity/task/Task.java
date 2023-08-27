@@ -1,10 +1,7 @@
 package ru.tusur.edu.entity.task;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.Instant;
@@ -14,8 +11,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@ToString(exclude = {"taskCategory", "taskDifficulty", "users"})
+@ToString(exclude = {"taskCategory", "taskDifficulty", "userTasks"})
 @RequiredArgsConstructor
+@Builder(toBuilder = true)
+@AllArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +36,7 @@ public class Task {
     private TaskDifficulty taskDifficulty;
 
     @Column(name = "add_date", nullable = false)
-    private Instant add_date;
+    private Instant addDate;
 
     @OneToMany(mappedBy = "task")
     private Set<UserTask> userTasks;

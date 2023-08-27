@@ -1,13 +1,11 @@
 package ru.tusur.edu.security.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import ru.tusur.edu.security.type.RoleSet;
@@ -34,6 +32,7 @@ public class Role implements GrantedAuthority {
     private RoleSet name;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private Set<User> users = new LinkedHashSet<>();
 
     @Override
