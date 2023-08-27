@@ -5,5 +5,4 @@ public enum TaskDifficultyType {
     MEDIUM,
     HARD,
     IMPOSSIBLE
-    ;
 }
