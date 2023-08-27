@@ -110,8 +110,9 @@
 
 ## Как развернуть
 
-[TODO] Добавить поддержку docker-compose 
-[TODO] Добавить поддержку Swagger 
+[TODO] Добавить поддержку docker-compose.
+
+[TODO] Добавить поддержку Swagger.
 
 ## API
 
