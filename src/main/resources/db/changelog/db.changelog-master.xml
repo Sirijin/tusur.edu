@@ -3,13 +3,14 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+                      https:///www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
     <include file="db/changelog/changes/20232208-add_table_achievement.xml"/>
     <include file="db/changelog/changes/20232208-add_table_role.xml"/>
     <include file="db/changelog/changes/20232208-add_table_task_category.xml"/>
     <include file="db/changelog/changes/20232208-add_table_task_difficulty.xml"/>
     <include file="db/changelog/changes/20232208-add_table_task.xml"/>
+    <include file="db/changelog/changes/20232208-add_table_task_solution.xml"/>
     <include file="db/changelog/changes/20232208-add_table_user.xml"/>
     <include file="db/changelog/changes/20232208-add_table_user_achievement.xml"/>
     <include file="db/changelog/changes/20232208-add_table_user_task.xml"/>
