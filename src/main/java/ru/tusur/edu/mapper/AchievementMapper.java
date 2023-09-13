@@ -1,8 +1,8 @@
 package ru.tusur.edu.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.tusur.edu.dto.achievement.AchievementDto;
-import ru.tusur.edu.entity.achievement.Achievement;
+import ru.tusur.edu.dto.AchievementDto;
+import ru.tusur.edu.entity.Achievement;
 
 @Component
 public class AchievementMapper {
