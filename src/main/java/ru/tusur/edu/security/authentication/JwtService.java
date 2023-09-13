@@ -96,6 +96,7 @@ public class JwtService {
                 .build();
     }
 
+    @SuppressWarnings("unchecked")
     private Role getRoleFromClaims(Claims claims) {
         List<Map<String, Object>> roles = claims.get("role", List.class);
 

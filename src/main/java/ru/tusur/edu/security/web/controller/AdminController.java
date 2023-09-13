@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.*;
 import ru.tusur.edu.security.service.UserService;
 import ru.tusur.edu.security.web.packet.dto.UserDto;
 
-@RestController
-@RequestMapping("/api/v1/admin")
+@RestController()
+@RequestMapping(value = "/api/v1/admin", produces = {"application/json"})
 @RequiredArgsConstructor
 public class AdminController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> findAllPageable() {
         return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable("id") Long id) {
+    public ResponseEntity<?> findOne(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 

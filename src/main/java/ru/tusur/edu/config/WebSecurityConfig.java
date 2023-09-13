@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.tusur.edu.security.authentication.JwtFilter;
 import ru.tusur.edu.security.service.UserService;
+import ru.tusur.edu.type.web.AllowedUri;
 
 @Configuration
 @EnableWebSecurity
@@ -35,7 +36,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         authorizeHttpRequests ->
                                 authorizeHttpRequests
-                                        .requestMatchers("/api/v1/auth/**").permitAll()
+                                        .requestMatchers(AllowedUri.getAllowedUris()).permitAll()
+                                        .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN_ROLE")
                                         .anyRequest().authenticated())
                 .authenticationProvider(daoAuthenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

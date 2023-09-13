@@ -69,6 +69,15 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id")
     private Role role;
 
+    public void increaseBalanceForTask() {
+        this.balance += 10;
+    }
+
+    public void increaseDailyActivityForTask() {
+
+        this.dailyActivity += 10.0;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(role.getName().name()));
