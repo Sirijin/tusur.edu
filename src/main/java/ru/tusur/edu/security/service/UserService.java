@@ -44,6 +44,10 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
     }
+    @SneakyThrows
+    public User findOneByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
+    }
 
     @SneakyThrows
     public UserResponse findAll() {

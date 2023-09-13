@@ -6,6 +6,7 @@ import org.hibernate.proxy.HibernateProxy;
 import ru.tusur.edu.security.entity.User;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -30,7 +31,7 @@ public class UserTask {
     @JoinColumn(name = "task_id")
     private Task task;
 
-    @Column(name = "complete_date", updatable = false)
+    @Column(name = "complete_date")
     private Timestamp completeDate;
 
     @Column(name = "is_started", nullable = false)

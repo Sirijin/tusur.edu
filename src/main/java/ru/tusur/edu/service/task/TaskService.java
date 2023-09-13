@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +16,14 @@ import ru.tusur.edu.mapper.TaskMapper;
 import ru.tusur.edu.repository.task.*;
 import ru.tusur.edu.security.authentication.CustomPrincipal;
 import ru.tusur.edu.security.entity.User;
+import ru.tusur.edu.security.repository.UserRepository;
 import ru.tusur.edu.type.task.TaskCategoryType;
 import ru.tusur.edu.type.task.TaskDifficultyType;
 import ru.tusur.edu.web.packet.request.PageableRequest;
 import ru.tusur.edu.web.packet.request.TaskSolutionRequest;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +37,7 @@ public class TaskService {
     private final TaskDifficultyRepository taskDifficultyRepository;
     private final TaskSolutionRepository taskSolutionRepository;
     private final UserTaskRepository userTaskRepository;
+    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
 
     @SneakyThrows
@@ -117,6 +121,7 @@ public class TaskService {
     }
 
     @SneakyThrows
+    @Transactional
     public ResponseEntity<?> sendSolution(Long taskId, TaskSolutionRequest solutionRequest) {
         Optional<Task> taskOptional = taskRepository.findById(taskId);
 
@@ -143,8 +148,8 @@ public class TaskService {
 
     private void initializeUserTask(Long userId, Long taskId) {
         UserTask newUserTask = UserTask.builder()
-                .user(userTaskRepository.findUserByUserId(userId))
-                .task(userTaskRepository.findTaskByTaskId(taskId))
+                .user(userRepository.findById(userId).get())
+                .task(taskRepository.findById(taskId).get())
                 .completeDate(null)
                 .build();
 
@@ -152,7 +157,12 @@ public class TaskService {
     }
 
     private static Long getUserId() {
-        return ((CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+//        return ((CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.toString());
+
+        CustomPrincipal principal = (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.getId();
     }
 
     private void handleCorrectSolution(Long taskId, Long userId) {
@@ -166,6 +176,7 @@ public class TaskService {
         User user = userTask.getUser();
         user.increaseBalanceForTask();
         user.increaseDailyActivityForTask();
+        userRepository.save(user);
     }
 
     private void updateFields(TaskDto updatedDto, Task existingTask) {
