@@ -1,4 +1,4 @@
-package ru.tusur.edu.web.controller.achievement;
+package ru.tusur.edu.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +16,12 @@ public class AchievementController {
     private final AchievementService achievementService;
 
     @GetMapping("/list")
-    public ResponseEntity<?> findAchievements() {
-        try {
-            return ResponseEntity.ok(achievementService.findAll());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public ResponseEntity<?> findAllPageable() {
+        return ResponseEntity.ok(achievementService.findAll());    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findAchievementById(@PathVariable("id") Long id) {
-        try {
-            return ResponseEntity.ok(achievementService.findById(id));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<?> findOne(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(achievementService.findById(id));
     }
 
 }

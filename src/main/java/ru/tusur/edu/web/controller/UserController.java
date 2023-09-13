@@ -1,4 +1,4 @@
-package ru.tusur.edu.web.controller.user;
+package ru.tusur.edu.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
