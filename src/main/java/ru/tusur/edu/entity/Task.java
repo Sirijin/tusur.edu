@@ -1,0 +1,69 @@
+package ru.tusur.edu.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.sql.Timestamp;
+import java.util.Objects;
+import java.util.Set;
+
+@Entity
+@Table(name = "task")
+@Getter
+@Setter
+@RequiredArgsConstructor
+@Builder(toBuilder = true)
+@AllArgsConstructor
+@ToString(exclude = {"taskCategory", "taskDifficulty", "userTasks", "taskSolutions"})
+@EntityListeners(AuditingEntityListener.class)
+public class Task {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "description", nullable = false)
+    private String description;
+
+    @Column(name = "add_date", nullable = false)
+    @CreatedDate
+    private Timestamp addDate;
+
+    @ManyToOne
+    @JoinColumn(name = "task_category_id")
+    private TaskCategory taskCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "task_difficulty_id")
+    private TaskDifficulty taskDifficulty;
+
+    @OneToMany(mappedBy = "task", orphanRemoval = true)
+    private Set<TaskSolution> taskSolutions;
+
+    @OneToMany(mappedBy = "task")
+    private Set<UserTask> userTasks;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Task task = (Task) o;
+        return getId() != null && Objects.equals(getId(), task.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+}
+
+

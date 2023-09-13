@@ -23,4 +23,33 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20232208-add_table_task_difficulty.xml-2" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_difficulty
+                WHERE name in ('DIFFICULTY_EASY', 'DIFFICULTY_MEDIUM', 'DIFFICULTY_HARD', 'DIFFICULTY_IMPOSSIBLE',
+                               'DIFFICULTY_UNKNOWN');
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default difficulties</comment>
+
+        <insert tableName="task_difficulty">
+            <column name="name" value="DIFFICULTY_EASY"/>
+        </insert>
+        <insert tableName="task_difficulty">
+            <column name="name" value="DIFFICULTY_MEDIUM"/>
+        </insert>
+        <insert tableName="task_difficulty">
+            <column name="name" value="DIFFICULTY_HARD"/>
+        </insert>
+        <insert tableName="task_difficulty">
+            <column name="name" value="DIFFICULTY_IMPOSSIBLE"/>
+        </insert>
+        <insert tableName="task_difficulty">
+            <column name="name" value="DIFFICULTY_UNKNOWN"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

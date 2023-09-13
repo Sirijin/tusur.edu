@@ -1,39 +1,27 @@
-package ru.tusur.edu.entity.achievement;
+package ru.tusur.edu.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
-import ru.tusur.edu.entity.task.UserTask;
-import ru.tusur.edu.security.entity.User;
+import ru.tusur.edu.type.task.TaskDifficultyType;
 
-import java.time.Instant;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_achievement")
+@Table(name = "task_difficulty")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class UserAchievement {
-
+public class TaskDifficulty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "achievement_id")
-    private Achievement achievement;
-
-    @Column(name = "receive_date")
-    private Instant receiveDate;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "name", nullable = false)
+    private TaskDifficultyType name;
 
     @Override
     public final boolean equals(Object o) {
@@ -42,8 +30,8 @@ public class UserAchievement {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        UserTask userTask = (UserTask) o;
-        return getId() != null && Objects.equals(getId(), userTask.getId());
+        TaskDifficulty that = (TaskDifficulty) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
     @Override

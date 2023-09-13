@@ -1,45 +1,45 @@
-package ru.tusur.edu.entity.task;
+package ru.tusur.edu.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
+import ru.tusur.edu.security.entity.User;
 
-import java.time.Instant;
+import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
+@Table(name = "user_task")
 @Getter
 @Setter
-@ToString(exclude = {"taskCategory", "taskDifficulty", "userTasks"})
+@ToString
 @RequiredArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor
-public class Task {
+public class UserTask {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
-
-    @Column(name = "description", nullable = false)
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "task_category_id")
-    private TaskCategory taskCategory;
+    @JoinColumn(name = "task_id")
+    private Task task;
 
-    @ManyToOne
-    @JoinColumn(name = "task_difficulty_id")
-    private TaskDifficulty taskDifficulty;
+    @Column(name = "complete_date", updatable = false)
+    private Timestamp completeDate;
 
-    @Column(name = "add_date", nullable = false)
-    private Instant addDate;
+    @Column(name = "is_started", nullable = false)
+    @Builder.Default
+    private Boolean isStarted = true;
 
-    @OneToMany(mappedBy = "task")
-    private Set<UserTask> userTasks;
+    @Column(name = "is_finished", nullable = false)
+    @Builder.Default
+    private Boolean isFinished = false;
 
     @Override
     public final boolean equals(Object o) {
@@ -48,8 +48,8 @@ public class Task {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        Task task = (Task) o;
-        return getId() != null && Objects.equals(getId(), task.getId());
+        UserTask userTask = (UserTask) o;
+        return getId() != null && Objects.equals(getId(), userTask.getId());
     }
 
     @Override

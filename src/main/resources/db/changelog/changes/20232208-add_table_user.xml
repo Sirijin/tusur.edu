@@ -29,13 +29,13 @@
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="first_name" type="varchar(255)">
+            <column name="first_name" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="middle_name" type="varchar(255)">
+            <column name="middle_name" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_name" type="varchar(255)">
+            <column name="last_name" type="varchar(32)">
                 <constraints nullable="false"/>
             </column>
             <column name="birthday" type="date">

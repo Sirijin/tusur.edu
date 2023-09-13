@@ -23,4 +23,36 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20232208-add_table_task_category.xml-2" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_category
+                WHERE name in ('CATEGORY_SORTING', 'CATEGORY_RECURSION', 'CATEGORY_OPTIMIZATION', 'CATEGORY_ARRAYS',
+                               'CATEGORY_ENCODING', 'CATEGORY_UNKNOWN');
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default categories</comment>
+
+        <insert tableName="task_category">
+            <column name="name" value="CATEGORY_SORTING"/>
+        </insert>
+        <insert tableName="task_category">
+            <column name="name" value="CATEGORY_RECURSION"/>
+        </insert>
+        <insert tableName="task_category">
+            <column name="name" value="CATEGORY_OPTIMIZATION"/>
+        </insert>
+        <insert tableName="task_category">
+            <column name="name" value="CATEGORY_ARRAYS"/>
+        </insert>
+        <insert tableName="task_category">
+            <column name="name" value="CATEGORY_ENCODING"/>
+        </insert>
+        <insert tableName="task_category">
+            <column name="name" value="CATEGORY_UNKNOWN"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>

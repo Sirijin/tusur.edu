@@ -1,4 +1,4 @@
-package ru.tusur.edu.entity.achievement;
+package ru.tusur.edu.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,6 +7,7 @@ import org.hibernate.proxy.HibernateProxy;
 import java.util.Objects;
 
 @Entity
+@Table(name = "achievement")
 @Getter
 @Setter
 @ToString
