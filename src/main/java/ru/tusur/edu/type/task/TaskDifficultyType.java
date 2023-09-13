@@ -1,8 +1,9 @@
 package ru.tusur.edu.type.task;
 
 public enum TaskDifficultyType {
-    EASY,
-    MEDIUM,
-    HARD,
-    IMPOSSIBLE
+    DIFFICULTY_EASY,
+    DIFFICULTY_MEDIUM,
+    DIFFICULTY_HARD,
+    DIFFICULTY_IMPOSSIBLE,
+    DIFFICULTY_UNKNOWN
 }
