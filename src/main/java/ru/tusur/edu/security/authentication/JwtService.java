@@ -49,6 +49,7 @@ public class JwtService {
                 .compact();
     }
 
+    @SuppressWarnings("SameReturnValue")
     public boolean validateToken(String token) {
         try {
             Jwts

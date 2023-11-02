@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +13,6 @@ import java.util.Set;
 @Builder(toBuilder = true)
 public class UserResponse {
 
-    private Set<UserDto> users;
+    private List<UserDto> users;
     private Long total;
 }

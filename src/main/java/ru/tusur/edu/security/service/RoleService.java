@@ -20,4 +20,12 @@ public class RoleService {
         return roleRepository.findByName(roleSet);
     }
 
+    public Role map(RoleSet roleSet) {
+        return findByName(roleSet).orElseThrow(() -> new RuntimeException("No such role found"));
+    }
+
+    public RoleSet map(Role role) {
+        return RoleSet.findByName(role).orElseThrow(() -> new RuntimeException("No such role found"));
+    }
+
 }

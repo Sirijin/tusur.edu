@@ -26,10 +26,13 @@
             <column name="add_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="task_category_id" type="bigint">
+            <column name="task_theme_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="task_difficulty_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_level_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -39,16 +42,16 @@
 
         <preConditions onFail="MARK_RAN">
             <not>
-                <foreignKeyConstraintExists foreignKeyTableName="task" foreignKeyName="fk_task_category_id"/>
+                <foreignKeyConstraintExists foreignKeyTableName="task" foreignKeyName="fk_task_theme_id"/>
             </not>
         </preConditions>
 
         <comment>add foreign key on role_id</comment>
 
-        <addForeignKeyConstraint constraintName="fk_task_category_id"
+        <addForeignKeyConstraint constraintName="fk_task_theme_id"
                                  baseTableName="task"
-                                 baseColumnNames="task_category_id"
-                                 referencedTableName="task_category"
+                                 baseColumnNames="task_theme_id"
+                                 referencedTableName="task_theme"
                                  referencedColumnNames="id"/>
     </changeSet>
     
@@ -66,6 +69,23 @@
                                  baseTableName="task"
                                  baseColumnNames="task_difficulty_id"
                                  referencedTableName="task_difficulty"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20231609-add_table_task.xml-3" author="mokrovitskii">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="task" foreignKeyName="fk_task_level_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on role_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_task_level_id"
+                                 baseTableName="task"
+                                 baseColumnNames="task_level_id"
+                                 referencedTableName="task_level"
                                  referencedColumnNames="id"/>
     </changeSet>
 

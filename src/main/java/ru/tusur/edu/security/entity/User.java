@@ -57,30 +57,36 @@ public class User implements UserDetails {
     private LocalDate birthday;
 
     @Column(name = "balance", nullable = false)
-    private Integer balance;
+    @Builder.Default
+    private Integer balance = 0;
 
     @Column(name = "daily_activity", nullable = false)
-    private Double dailyActivity;
+    @Builder.Default
+    private Double dailyActivity = 0.0;
 
     @Column(name = "days_in_a_row", nullable = false)
-    private Integer daysInARow;
+    @Builder.Default
+    private Integer daysInARow = 0;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
-    public void increaseBalanceForTask() {
-        this.balance += 10;
-    }
-
-    public void increaseDailyActivityForTask() {
-
-        this.dailyActivity += 10.0;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(role.getName().name()));
+    }
+
+    public void increaseBalanceBy(int value) {
+        this.balance += value;
+    }
+
+    public void increaseDailyActivityBy(double value) {
+        this.dailyActivity = Math.min(100.0, this.dailyActivity + value);
+    }
+
+    public void incrementDaysInARow() {
+        this.daysInARow++;
     }
 
     @Override

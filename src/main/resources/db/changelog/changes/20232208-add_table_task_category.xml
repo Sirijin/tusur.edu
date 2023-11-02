@@ -28,31 +28,94 @@
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*)
                 FROM public.task_category
-                WHERE name in ('CATEGORY_SORTING', 'CATEGORY_RECURSION', 'CATEGORY_OPTIMIZATION', 'CATEGORY_ARRAYS',
-                               'CATEGORY_ENCODING', 'CATEGORY_UNKNOWN');
+                WHERE name = 'CATEGORY_SORTING';
             </sqlCheck>
         </preConditions>
 
-        <comment>insert default categories</comment>
+        <comment>insert category_sorting</comment>
 
         <insert tableName="task_category">
             <column name="name" value="CATEGORY_SORTING"/>
         </insert>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_task_category.xml-3" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_category
+                WHERE name = 'CATEGORY_RECURSION';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert category_recursion</comment>
+
         <insert tableName="task_category">
             <column name="name" value="CATEGORY_RECURSION"/>
         </insert>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_task_category.xml-4" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_category
+                WHERE name = 'CATEGORY_OPTIMIZATION';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert category_optimization</comment>
+
         <insert tableName="task_category">
             <column name="name" value="CATEGORY_OPTIMIZATION"/>
         </insert>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_task_category.xml-5" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_category
+                WHERE name = 'CATEGORY_ARRAYS';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert category_arrays</comment>
+
         <insert tableName="task_category">
             <column name="name" value="CATEGORY_ARRAYS"/>
         </insert>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_task_category.xml-6" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_category
+                WHERE name = 'CATEGORY_ENCODING';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert category_encoding</comment>
+
         <insert tableName="task_category">
             <column name="name" value="CATEGORY_ENCODING"/>
         </insert>
+    </changeSet>
+
+    <changeSet id="20232208-add_table_task_category.xml-7" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_category
+                WHERE name = 'CATEGORY_UNKNOWN';
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert category_unknown</comment>
+
         <insert tableName="task_category">
             <column name="name" value="CATEGORY_UNKNOWN"/>
         </insert>
     </changeSet>
-
 </databaseChangeLog>

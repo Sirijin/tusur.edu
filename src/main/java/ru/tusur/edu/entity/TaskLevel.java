@@ -1,19 +1,22 @@
 package ru.tusur.edu.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
-import ru.tusur.edu.type.task.TaskDifficultyType;
+import ru.tusur.edu.type.task.TaskLevelType;
 
 import java.util.Objects;
 
 @Entity
-@Table(name = "task_difficulty")
+@Table(name = "task_level")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class TaskDifficulty {
+public class TaskLevel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -21,7 +24,7 @@ public class TaskDifficulty {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false)
-    private TaskDifficultyType name;
+    private TaskLevelType name;
 
     @Override
     public final boolean equals(Object o) {
@@ -30,7 +33,7 @@ public class TaskDifficulty {
         Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
         Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
         if (thisEffectiveClass != oEffectiveClass) return false;
-        TaskDifficulty that = (TaskDifficulty) o;
+        TaskLevel that = (TaskLevel) o;
         return getId() != null && Objects.equals(getId(), that.getId());
     }
 

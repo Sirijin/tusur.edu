@@ -9,6 +9,8 @@
     <include file="db/changelog/changes/20232208-add_table_role.xml"/>
     <include file="db/changelog/changes/20232208-add_table_task_category.xml"/>
     <include file="db/changelog/changes/20232208-add_table_task_difficulty.xml"/>
+    <include file="db/changelog/changes/20231609-add_table_task_level.xml"/>
+    <include file="db/changelog/changes/20232709-add_table_task_theme.xml"/>
     <include file="db/changelog/changes/20232208-add_table_task.xml"/>
     <include file="db/changelog/changes/20232208-add_table_task_solution.xml"/>
     <include file="db/changelog/changes/20232208-add_table_user.xml"/>

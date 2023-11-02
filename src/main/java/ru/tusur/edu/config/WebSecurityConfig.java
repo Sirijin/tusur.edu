@@ -36,10 +36,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         authorizeHttpRequests ->
                                 authorizeHttpRequests
-//                                        .requestMatchers(AllowedUri.getAllowedUris()).permitAll()
-//                                        .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN_ROLE")
-//                                        .anyRequest().authenticated()
-                                        .anyRequest().permitAll()
+                                        .requestMatchers(AllowedUri.getAllowedUris()).permitAll()
+                                        .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ADMIN_ROLE")
+                                        .anyRequest().authenticated()
                 )
                 .authenticationProvider(daoAuthenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

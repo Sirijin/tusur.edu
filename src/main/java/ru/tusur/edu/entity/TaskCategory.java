@@ -1,17 +1,22 @@
 package ru.tusur.edu.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 import ru.tusur.edu.type.task.TaskCategoryType;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "task_category")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"taskThemes"})
 @RequiredArgsConstructor
 public class TaskCategory {
     @Id
@@ -22,6 +27,9 @@ public class TaskCategory {
     @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false)
     private TaskCategoryType name;
+
+    @OneToMany(mappedBy = "taskCategory")
+    private Set<TaskTheme> taskThemes = new LinkedHashSet<>();
 
     @Override
     public final boolean equals(Object o) {

@@ -14,150 +14,156 @@ import ru.tusur.edu.security.authentication.CustomPrincipal;
 import ru.tusur.edu.security.authentication.JwtService;
 import ru.tusur.edu.security.entity.Role;
 import ru.tusur.edu.security.entity.User;
-import ru.tusur.edu.security.mapper.RoleMapper;
 import ru.tusur.edu.security.mapper.UserMapper;
 import ru.tusur.edu.security.repository.UserRepository;
 import ru.tusur.edu.security.type.RoleSet;
 import ru.tusur.edu.security.web.packet.dto.UserDto;
 import ru.tusur.edu.security.web.packet.dto.UserResponse;
 import ru.tusur.edu.security.web.packet.request.LoginRequest;
-import ru.tusur.edu.security.web.packet.request.RegisterRequest;
 import ru.tusur.edu.security.web.packet.response.LoginResponse;
 import ru.tusur.edu.security.web.packet.response.RegisterResponse;
+import ru.tusur.edu.type.task.TaskDifficultyType;
+import ru.tusur.edu.web.packet.request.PageableRequest;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
-    private final UserMapper userMapper;
-    private final RoleMapper roleMapper;
+    private final UserMapper mapper;
     private final RoleService roleService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
-    }
-    @SneakyThrows
-    public User findOneByUsername(String username) {
-        return userRepository.findByUsername(username).orElse(null);
+        return getUserByUsername(username);
     }
 
     @SneakyThrows
-    public UserResponse findAll() {
+    @Transactional(readOnly = true)
+    public UserResponse findAllPageable(PageableRequest pageableRequest) {
         return UserResponse
                 .builder()
-                .users(userRepository.findAll().stream()
-                        .map(userMapper::map)
-                        .filter(Optional::isPresent)
-                        .flatMap(Optional::stream)
-                        .collect(Collectors.toSet()))
+                .users(userRepository.findAll(pageableRequest.getPageable()).getContent().stream().map(mapper::toDto).toList())
                 .total(userRepository.count())
                 .build();
     }
 
     @SneakyThrows
-    public Optional<UserDto> findById(Long id) {
-        return userRepository.findById(id).flatMap(userMapper::map);
+    @Transactional(readOnly = true)
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @SneakyThrows
-    @Transactional
-    public Optional<UserDto> saveUser(UserDto dto) {
-        String password = passwordEncoder.encode(dto.getPassword());
-        return userMapper.map(dto, password)
-                .map(userRepository::save)
-                .flatMap(userMapper::map);
+    public User findOne(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     @SneakyThrows
-    @Transactional
-    public Optional<UserDto> updateUser(Long id, UserDto dto) {
-
-        if (!userRepository.existsById(id) || userRepository.findById(id).isEmpty()) {
-            return Optional.empty();
-        }
-
-        User user = getUserById(id);
-        Role role = roleMapper.map(dto.getRole());
-        if (dto.getUsername() != null && !dto.getUsername().equals(user.getUsername())) {
-            user.setUsername(dto.getUsername());
-        }
-
-        if (dto.getEmail() != null && !dto.getEmail().equals(user.getEmail())) {
-            user.setEmail(dto.getEmail());
-        }
-
-        if (dto.getPassword() != null && !passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        }
-
-        if (dto.getRole() != null && !user.getRole().equals(role)) {
-            user.setRole(role);
-        }
-
-        return userMapper.map(userRepository.save(user));
+    @Transactional(readOnly = true)
+    public UserDto findOneDto(Long taskId) {
+        return userRepository.findById(taskId).map(mapper::toDto).orElseThrow(() -> new EntityNotFoundException("User not found with id: " + taskId));
     }
 
     @SneakyThrows
-    @Transactional
-    public void deleteUser(Long id) {
-        if (userRepository.existsById(id) || userRepository.findById(id).isPresent()) {
-            userRepository.deleteById(id);
-        }
-    }
-
-    @SneakyThrows
-    @Transactional
-    public LoginResponse loginUser(LoginRequest request) {
+    @Transactional(readOnly = true)
+    public LoginResponse login(LoginRequest request) {
         User user = getUserByUsername(request.getUsername());
         String token = jwtService.createToken(user);
         return LoginResponse.of(token);
     }
 
     @SneakyThrows
+    public UserDto save(UserDto dto) {
+        User user = mapper.toEntity(dto);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setRole(roleService.map(dto.getRole()));
+
+        return mapper.toDto(userRepository.save(user));
+    }
+
+    @SneakyThrows
+    public void saveAll(List<User> users) {
+        userRepository.saveAll(users);
+    }
+
+    @SneakyThrows
+    public UserDto update(Long id, UserDto updatedDto) {
+        User user = findOne(id);
+        Role role = roleService.map(updatedDto.getRole());
+        updateFields(updatedDto, user, role);
+
+        return mapper.toDto(userRepository.save(user));
+    }
+
     @Transactional
-    public RegisterResponse registerUser(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("User with this username already exists");
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    @SneakyThrows
+    public RegisterResponse register(UserDto dto) {
+        if (userRepository.existsByUsernameOrEmail(dto.getUsername(), dto.getEmail())) {
+            throw new RuntimeException("This user already exists");
         }
 
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("This email is already in use");
-        }
-
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
         Role role = roleService.findByName(RoleSet.USER_ROLE).orElseThrow(() -> new EntityNotFoundException("Role not found"));
-        User savedUser = userRepository.save(userMapper.map(request, encodedPassword, role).orElseThrow(() -> new Exception("Failed to map User to UserDto")));
+        User user = mapper.toEntity(dto);
 
-        UserDto userDto = userMapper.map(savedUser).orElseThrow(() -> new Exception("Failed to map User to UserDto"));
+        user.setPassword(encodedPassword);
+        user.setRole(role);
+
+        UserDto userDto = mapper.toDto(user);
         return new RegisterResponse(userDto);
     }
 
     @SneakyThrows
+    @Transactional(readOnly = true)
     public UserDto getUserInfo(Authentication authentication) {
         CustomPrincipal principal = (CustomPrincipal) authentication.getPrincipal();
-        User user = userRepository.findById(principal.getId())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-        return userMapper.map(user)
-                .orElseThrow(() -> new RuntimeException("UserDto mapping failed"));
+        return mapper.toDto(findOne(principal.getId()));
     }
 
-    private User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    @SneakyThrows
+    @Transactional
+    public void addBalance(User user, TaskDifficultyType difficultyType) {
+        user.increaseBalanceBy(difficultyType.getCoinsReward());
+    }
+
+    @SneakyThrows
+    @Transactional
+    public void addActivity(User user, TaskDifficultyType difficultyType) {
+        user.increaseDailyActivityBy(difficultyType.getActivityReward());
     }
 
     private User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    private void updateFields(UserDto dto, User user, Role role) {
+        if (!dto.getUsername().equals(user.getUsername())) {
+            user.setUsername(dto.getUsername());
+        }
+
+        if (!dto.getEmail().equals(user.getEmail())) {
+            user.setEmail(dto.getEmail());
+        }
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+
+        if (!user.getRole().equals(role)) {
+            user.setRole(role);
+        }
     }
 }

@@ -17,7 +17,8 @@ public class AchievementController {
 
     @GetMapping("/list")
     public ResponseEntity<?> findAllPageable() {
-        return ResponseEntity.ok(achievementService.findAll());    }
+        return ResponseEntity.ok(achievementService.findAll());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findOne(@PathVariable("id") Long id) {

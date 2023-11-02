@@ -4,44 +4,184 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="20231609-add_table_task_level.xml-1" author="mokrovitskii">
+    <changeSet id="20232709-add_table_task_theme.xml-1" author="mokrovitskii">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="task_level"/>
+                <tableExists tableName="task_theme"/>
             </not>
         </preConditions>
 
-        <comment>create table task_level</comment>
+        <comment>create table task_theme</comment>
 
-        <createTable tableName="task_level">
+        <createTable tableName="task_theme">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints unique="true" nullable="false" primaryKey="true"/>
             </column>
             <column name="name" type="varchar(128)">
                 <constraints unique="true" nullable="false"/>
             </column>
+            <column name="task_category_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="20231609-add_table_task_level.xml-2" author="mokrovitskii">
+    <changeSet id="20232709-add_table_task_theme.xml-2" author="mokrovitskii">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyTableName="task_theme" foreignKeyName="fk_task_category_id"/>
+            </not>
+        </preConditions>
+
+        <comment>add foreign key on role_id</comment>
+
+        <addForeignKeyConstraint constraintName="fk_task_category_id"
+                                 baseTableName="task_theme"
+                                 baseColumnNames="task_category_id"
+                                 referencedTableName="task_category"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="20232709-add_table_task_theme.xml-3" author="mokrovitskii">
         <preConditions>
             <sqlCheck expectedResult="0">
                 SELECT COUNT(*)
-                FROM public.task_level
-                WHERE name in ('LEVEL_EGE', 'LEVEL_OGE', 'LEVEL_UNKNOWN');
+                FROM public.task_theme
+                WHERE task_category_id = 1;
             </sqlCheck>
         </preConditions>
 
-        <comment>insert default difficulties</comment>
+        <comment>insert default sorting themes</comment>
 
-        <insert tableName="task_level">
-            <column name="name" value="LEVEL_EGE"/>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_SORTING_ARRAYS"/>
+            <column name="task_category_id" value="1"/>
         </insert>
-        <insert tableName="task_level">
-            <column name="name" value="LEVEL_OGE"/>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_SORTING_STRINGS"/>
+            <column name="task_category_id" value="1"/>
         </insert>
-        <insert tableName="task_level">
-            <column name="name" value="LEVEL_UNKNOWN"/>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_SORTING_CUSTOM"/>
+            <column name="task_category_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20232709-add_table_task_theme.xml-4" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_theme
+                WHERE task_category_id = 2;
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default recursion themes</comment>
+
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_RECURSION_FACTORIAL"/>
+            <column name="task_category_id" value="2"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_RECURSION_FIBONACCI"/>
+            <column name="task_category_id" value="2"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_RECURSION_TREE_TRAVERSAL"/>
+            <column name="task_category_id" value="2"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20232709-add_table_task_theme.xml-5" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_theme
+                WHERE task_category_id = 3;
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default optimization themes</comment>
+
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_OPTIMIZATION_CACHE"/>
+            <column name="task_category_id" value="3"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_OPTIMIZATION_DATABASE"/>
+            <column name="task_category_id" value="3"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_OPTIMIZATION_ALGORITHMS"/>
+            <column name="task_category_id" value="3"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20232709-add_table_task_theme.xml-6" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_theme
+                WHERE task_category_id = 4;
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default arrays themes</comment>
+
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_ARRAYS_MIN_MAX"/>
+            <column name="task_category_id" value="4"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_ARRAYS_2D"/>
+            <column name="task_category_id" value="4"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_ARRAYS_DYNAMIC"/>
+            <column name="task_category_id" value="4"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20232709-add_table_task_theme.xml-7" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_theme
+                WHERE task_category_id = 5;
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default encoding themes</comment>
+
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_ENCODING_BASE64"/>
+            <column name="task_category_id" value="5"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_ENCODING_AES"/>
+            <column name="task_category_id" value="5"/>
+        </insert>
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_ENCODING_URL"/>
+            <column name="task_category_id" value="5"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20232709-add_table_task_theme.xml-8" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_theme
+                WHERE task_category_id = 6;
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default unknown theme</comment>
+
+        <insert tableName="task_theme">
+            <column name="name" value="THEME_UNKNOWN"/>
+            <column name="task_category_id" value="6"/>
         </insert>
     </changeSet>
 

@@ -1,10 +1,10 @@
 package ru.tusur.edu.repository.task;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.tusur.edu.entity.TaskDifficulty;
-import ru.tusur.edu.type.task.TaskDifficultyType;
+import ru.tusur.edu.entity.TaskLevel;
+import ru.tusur.edu.type.task.TaskLevelType;
 
-public interface TaskDifficultyRepository extends JpaRepository<TaskDifficulty, Long> {
+public interface TaskLevelRepository extends JpaRepository<TaskLevel, Long> {
 
-    TaskDifficulty findByName(TaskDifficultyType name);
+    TaskLevel findByName(TaskLevelType name);
 }

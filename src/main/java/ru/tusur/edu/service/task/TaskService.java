@@ -3,180 +3,159 @@ package ru.tusur.edu.service.task;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tusur.edu.dto.TaskDto;
 import ru.tusur.edu.dto.TaskResponse;
-import ru.tusur.edu.entity.*;
+import ru.tusur.edu.entity.Task;
+import ru.tusur.edu.entity.TaskDifficulty;
+import ru.tusur.edu.entity.TaskLevel;
+import ru.tusur.edu.entity.TaskTheme;
 import ru.tusur.edu.mapper.TaskMapper;
-import ru.tusur.edu.repository.task.*;
-import ru.tusur.edu.security.authentication.CustomPrincipal;
-import ru.tusur.edu.security.entity.User;
-import ru.tusur.edu.security.repository.UserRepository;
+import ru.tusur.edu.repository.task.TaskRepository;
 import ru.tusur.edu.type.task.TaskCategoryType;
-import ru.tusur.edu.type.task.TaskDifficultyType;
+import ru.tusur.edu.util.UserUtil;
 import ru.tusur.edu.web.packet.request.PageableRequest;
 import ru.tusur.edu.web.packet.request.TaskSolutionRequest;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static ru.tusur.edu.type.task.TaskCategoryType.CATEGORY_UNKNOWN;
+import static ru.tusur.edu.type.task.TaskCategoryType.values;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class TaskService {
 
-    private final TaskRepository taskRepository;
-    private final TaskCategoryRepository taskCategoryRepository;
-    private final TaskDifficultyRepository taskDifficultyRepository;
-    private final TaskSolutionRepository taskSolutionRepository;
-    private final UserTaskRepository userTaskRepository;
-    private final UserRepository userRepository;
     private final TaskMapper taskMapper;
+    private final TaskRepository taskRepository;
+    private final TaskDifficultyService taskDifficultyService;
+    private final TaskThemeService taskThemeService;
+    private final TaskLevelService taskLevelService;
+    private final TaskSolutionService taskSolutionService;
+    private final UserTaskService userTaskService;
 
     @SneakyThrows
+    @Transactional(readOnly = true)
     public TaskResponse findAllPageable(PageableRequest pageableRequest) {
         return TaskResponse
                 .builder()
-                .tasks(taskRepository.findAll(pageableRequest.getPageable()).getContent().stream().map(taskMapper::toDto).toList())
+                .items(taskRepository.findAll(pageableRequest.getPageable()).getContent().stream().map(taskMapper::toDto).toList())
                 .total(taskRepository.count())
                 .build();
     }
 
     @SneakyThrows
-    public TaskResponse findAllByCategory(String category, PageableRequest pageableRequest) {
-        Page<Task> tasksPage = taskRepository.findByTaskCategory(TaskCategoryType.valueOf(category), pageableRequest.getPageable());
-        return TaskResponse
-                .builder()
-                .tasks(tasksPage.getContent().stream().map(taskMapper::toDto).toList())
-                .total(tasksPage.getTotalElements())
-                .build();
-    }
-
-    @SneakyThrows
-    public TaskResponse findAllByDifficulty(String difficulty, PageableRequest pageableRequest) {
-        Page<Task> tasksPage = taskRepository.findByTaskDifficulty(TaskDifficultyType.valueOf(difficulty), pageableRequest.getPageable());
-        return TaskResponse
-                .builder()
-                .tasks(tasksPage.getContent().stream().map(taskMapper::toDto).toList())
-                .total(tasksPage.getTotalElements())
-                .build();
-    }
-
-    @SneakyThrows
-    @Transactional
-    public TaskDto findOne(Long taskId) {
-        Long userId = getUserId();
-        if (!userTaskRepository.existsByUserIdAndTaskId(userId, taskId)) {
-            initializeUserTask(userId, taskId);
-        }
+    public TaskDto findOneDto(Long taskId) {
+        userTaskService.checkIfUserStartedTask(taskId);
         return taskRepository.findById(taskId).map(taskMapper::toDto).orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + taskId));
     }
 
     @SneakyThrows
-    @Transactional
     public TaskDto save(TaskDto dto) {
         Task task = taskMapper.toEntity(dto);
 
-        TaskCategoryType category = mapToEnumOrDefault(dto.getTaskCategoryType(), TaskCategoryType.CATEGORY_UNKNOWN);
-        task.setTaskCategory(taskCategoryRepository.findByName(category));
-
-        TaskDifficultyType difficulty = mapToEnumOrDefault(dto.getTaskDifficultyType(), TaskDifficultyType.DIFFICULTY_UNKNOWN);
-        task.setTaskDifficulty(taskDifficultyRepository.findByName(difficulty));
-
-        task = taskRepository.save(task);
-
-        Task finalTask = task;
-        List<TaskSolution> taskSolutions = dto.getTaskSolutions()
-                .stream()
-                .map(solution -> TaskSolution.builder().solution(solution).task(finalTask).build())
-                .toList();
-
-        taskSolutionRepository.saveAll(taskSolutions);
+        task.setTaskTheme(taskThemeService.findByName(dto.getTaskThemeType()));
+        task.setTaskDifficulty(taskDifficultyService.findByName(dto.getTaskDifficultyType()));
+        task.setTaskLevel(taskLevelService.findByName(dto.getTaskLevelType()));
+        taskRepository.save(task);
+        taskSolutionService.saveTaskSolutions(task, dto.getTaskSolutions());
 
         return taskMapper.toDto(task);
     }
 
     @SneakyThrows
-    @Transactional
+    public List<TaskDto> saveList(List<TaskDto> dtos) {
+        return dtos.stream().map(this::save).toList();
+    }
+
+    @SneakyThrows
     public TaskDto update(Long taskId, TaskDto updatedDto) {
-        Task existingTask = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + taskId));
+        Task task = findOne(taskId);
 
-        updateFields(updatedDto, existingTask);
+        updateFields(updatedDto, task);
 
-        return taskMapper.toDto(taskRepository.save(existingTask));
+        return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Transactional
-    @SneakyThrows
     public void delete(Long id) {
         taskRepository.deleteById(id);
     }
 
     @SneakyThrows
-    @Transactional
-    public ResponseEntity<?> sendSolution(Long taskId, TaskSolutionRequest solutionRequest) {
-        Optional<Task> taskOptional = taskRepository.findById(taskId);
+    public ResponseEntity<?> processUserSolution(Long taskId, TaskSolutionRequest request) {
+        Task task = findOne(taskId);
 
-        if (taskOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Task task = taskOptional.get();
-
-        List<String> correctAnswers = task.getTaskSolutions()
-                .stream()
-                .map(TaskSolution::getSolution)
-                .toList();
-
-        List<String> userAnswers = solutionRequest.getSolution();
-
-        if (correctAnswers.equals(userAnswers)) {
-            handleCorrectSolution(task.getId(), getUserId());
+        if (taskSolutionService.checkIfSolutionsAreCorrect(task, request)) {
+            userTaskService.handleCorrectSolution(task, UserUtil.getUserId());
             return ResponseEntity.ok("Решение верное!");
         } else {
             return ResponseEntity.ok("Решение неверное");
         }
     }
 
-    private void initializeUserTask(Long userId, Long taskId) {
-        UserTask newUserTask = UserTask.builder()
-                .user(userRepository.findById(userId).get())
-                .task(taskRepository.findById(taskId).get())
-                .completeDate(null)
-                .build();
-
-        userTaskRepository.save(newUserTask);
+    @SneakyThrows
+    private Task findOne(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + id));
     }
 
-    private static Long getUserId() {
-//        return ((CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.toString());
+    @SneakyThrows
+    public TaskResponse generateChallengingTest(int tasksAmount) {
+        Long userId = UserUtil.getUserId();
+        List<TaskCategoryType> categoryTypes = Arrays.stream(values())
+                .filter(categoryType -> categoryType != CATEGORY_UNKNOWN)
+                .toList();
 
-        CustomPrincipal principal = (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return principal.getId();
+        return TaskResponse.builder()
+                .items(categoryTypes.stream()
+                        .map(categoryType -> {
+                            TaskTheme theme = findThemeWithFewestSolvedTasks(categoryType, userId);
+                            Task task = findRandomTaskInTheme(theme);
+                            return taskMapper.toDto(task);
+                        })
+                        .limit(tasksAmount)
+                        .collect(Collectors.toList()))
+                .total(tasksAmount).build();
     }
 
-    private void handleCorrectSolution(Long taskId, Long userId) {
-        UserTask userTask = userTaskRepository.findByUserIdAndTaskId(userId, taskId)
-                .orElseThrow(() -> new RuntimeException("User has not started this task yet"));
+    private TaskTheme findThemeWithFewestSolvedTasks(TaskCategoryType categoryType, Long userId) {
+        List<TaskTheme> themesInCategory = taskThemeService.findThemesInCategory(categoryType);
 
-        userTask.setCompleteDate(new Timestamp(System.currentTimeMillis()));
-        userTask.setIsFinished(true);
-        userTaskRepository.save(userTask);
+        if (themesInCategory.isEmpty()) {
+            return null;
+        }
 
-        User user = userTask.getUser();
-        user.increaseBalanceForTask();
-        user.increaseDailyActivityForTask();
-        userRepository.save(user);
+        Map<TaskTheme, Long> themeToSolvedCount = new HashMap<>();
+
+        for (TaskTheme theme : themesInCategory) {
+            Long solvedCount = userTaskService.countSolvedTasksByUserIdAndTheme(userId, theme);
+            themeToSolvedCount.put(theme, solvedCount);
+        }
+        return Collections.min(
+                themeToSolvedCount.entrySet(),
+                Map.Entry.comparingByValue()
+        ).getKey();
+    }
+
+    private Task findRandomTaskInTheme(TaskTheme theme) {
+        List<Task> tasksInTheme = taskRepository.findByTaskTheme(theme);
+        if (tasksInTheme.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(tasksInTheme.size());
+
+        return tasksInTheme.get(randomIndex);
+    }
+
+    public Object submitTest() {
+
+        return null;
     }
 
     private void updateFields(TaskDto updatedDto, Task existingTask) {
@@ -188,26 +167,19 @@ public class TaskService {
             existingTask.setDescription(updatedDto.getDescription());
         }
 
-        TaskCategoryType categoryType = mapToEnumOrDefault(updatedDto.getTaskCategoryType(), TaskCategoryType.CATEGORY_UNKNOWN);
-        TaskCategory newCategory = taskCategoryRepository.findByName(categoryType);
-
-        if (newCategory != null && !existingTask.getTaskCategory().equals(newCategory)) {
-            existingTask.setTaskCategory(newCategory);
+        TaskTheme newTheme = taskThemeService.findByName(updatedDto.getTaskThemeType());
+        if (!existingTask.getTaskTheme().equals(newTheme)) {
+            existingTask.setTaskTheme(newTheme);
         }
 
-        TaskDifficultyType difficultyType = mapToEnumOrDefault(updatedDto.getTaskDifficultyType(), TaskDifficultyType.DIFFICULTY_UNKNOWN);
-        TaskDifficulty newDifficulty = taskDifficultyRepository.findByName(difficultyType);
-
-        if (newDifficulty != null && !existingTask.getTaskDifficulty().equals(newDifficulty)) {
+        TaskDifficulty newDifficulty = taskDifficultyService.findByName(updatedDto.getTaskDifficultyType());
+        if (!existingTask.getTaskDifficulty().equals(newDifficulty)) {
             existingTask.setTaskDifficulty(newDifficulty);
         }
-    }
 
-    private <T extends Enum<T>> T mapToEnumOrDefault(String value, T defaultValue) {
-        try {
-            return Enum.valueOf(defaultValue.getDeclaringClass(), value);
-        } catch (IllegalArgumentException | NullPointerException e) {
-            return defaultValue;
+        TaskLevel newLevel = taskLevelService.findByName(updatedDto.getTaskLevelType());
+        if (!existingTask.getTaskLevel().equals(newLevel)) {
+            existingTask.setTaskLevel(newLevel);
         }
     }
 }

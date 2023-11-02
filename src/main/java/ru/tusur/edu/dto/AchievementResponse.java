@@ -11,8 +11,6 @@ import java.util.List;
 public class AchievementResponse {
 
     @NotNull
-    private List<AchievementDto> achievements;
-
-    @NotNull
+    private List<AchievementDto> items;
     private long total;
 }

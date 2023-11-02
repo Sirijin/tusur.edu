@@ -17,7 +17,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Builder(toBuilder = true)
 @AllArgsConstructor
-@ToString(exclude = {"taskCategory", "taskDifficulty", "userTasks", "taskSolutions"})
+@ToString(exclude = {"taskTheme", "taskDifficulty", "userTasks", "taskSolutions"})
 @EntityListeners(AuditingEntityListener.class)
 public class Task {
     @Id
@@ -36,12 +36,16 @@ public class Task {
     private Timestamp addDate;
 
     @ManyToOne
-    @JoinColumn(name = "task_category_id")
-    private TaskCategory taskCategory;
+    @JoinColumn(name = "task_theme_id")
+    private TaskTheme taskTheme;
 
     @ManyToOne
     @JoinColumn(name = "task_difficulty_id")
     private TaskDifficulty taskDifficulty;
+
+    @ManyToOne
+    @JoinColumn(name = "task_level_id")
+    private TaskLevel taskLevel;
 
     @OneToMany(mappedBy = "task", orphanRemoval = true)
     private Set<TaskSolution> taskSolutions;

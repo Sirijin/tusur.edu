@@ -19,14 +19,14 @@ public class AchievementService {
     public AchievementResponse findAll() {
         return AchievementResponse
                 .builder()
-                .achievements(achievementRepository.findAll().stream().map(achievementMapper::map).toList())
+                .items(achievementRepository.findAll().stream().map(achievementMapper::toDto).toList())
                 .total(achievementRepository.count())
                 .build();
     }
 
     @SneakyThrows
     public AchievementDto findById(Long id) {
-        return achievementRepository.findById(id).map(achievementMapper::map).orElse(null);
+        return achievementRepository.findById(id).map(achievementMapper::toDto).orElse(null);
     }
 
 }

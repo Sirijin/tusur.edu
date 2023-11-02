@@ -4,22 +4,31 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tusur.edu.entity.TaskCategory;
-import ru.tusur.edu.repository.task.TaskCategoryRepository;
+import ru.tusur.edu.entity.TaskTheme;
+import ru.tusur.edu.repository.task.TaskThemeRepository;
 import ru.tusur.edu.type.task.TaskCategoryType;
+import ru.tusur.edu.type.task.TaskThemeType;
 
-import static ru.tusur.edu.util.EnumUtil.*;
+import java.util.List;
+
+import static ru.tusur.edu.util.EnumUtil.mapToEnumOrDefault;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
-public class TaskCategoryService {
+@Transactional(readOnly = true)
+public class TaskThemeService {
 
-    private final TaskCategoryRepository taskCategoryRepository;
+    private final TaskThemeRepository taskThemeRepository;
 
     @SneakyThrows
-    public TaskCategory findByName(String name) {
-        TaskCategoryType category = mapToEnumOrDefault(name, TaskCategoryType.CATEGORY_UNKNOWN);
-        return taskCategoryRepository.findByName(category);
+    public TaskTheme findByName(String name) {
+        TaskThemeType theme = mapToEnumOrDefault(name, TaskThemeType.THEME_UNKNOWN);
+        return taskThemeRepository.findByName(theme);
     }
+
+    @SneakyThrows
+    public List<TaskTheme> findThemesInCategory(TaskCategoryType categoryType) {
+        return taskThemeRepository.findByTaskCategoryName(categoryType);
+    }
+
 }

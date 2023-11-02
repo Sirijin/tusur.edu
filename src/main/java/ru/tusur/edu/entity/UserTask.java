@@ -6,7 +6,6 @@ import org.hibernate.proxy.HibernateProxy;
 import ru.tusur.edu.security.entity.User;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity

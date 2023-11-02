@@ -1,7 +1,8 @@
 package ru.tusur.edu.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,23 +16,26 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class TaskDto {
 
-    @NotNull
-    @NotBlank
+    @PositiveOrZero
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
+
+    @NotEmpty
     private String title;
 
-    @NotNull
-    @NotBlank
+    @NotEmpty
     private String description;
 
-    @NotNull
-    @NotBlank
-    private String taskCategoryType;
+    @NotEmpty
+    private String taskThemeType;
 
-    @NotNull
-    @NotBlank
+    @NotEmpty
     private String taskDifficultyType;
 
-    @NotNull
-    @NotBlank
+    @NotEmpty
+    private String taskLevelType;
+
+    @NotEmpty
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<String> taskSolutions;
 }
