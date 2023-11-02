@@ -1,0 +1,302 @@
+[
+  {
+    "title": "Sorting Arrays Task 1",
+    "description": "Description for Sorting Arrays Task 1",
+    "taskThemeType": "THEME_SORTING_ARRAYS",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Sorting Arrays Task 1"
+    ]
+  },
+  {
+    "title": "Sorting Arrays Task 2",
+    "description": "Description for Sorting Arrays Task 2",
+    "taskThemeType": "THEME_SORTING_ARRAYS",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Sorting Arrays Task 2"
+    ]
+  },
+  {
+    "title": "Sorting Strings Task 1",
+    "description": "Description for Sorting Strings Task 1",
+    "taskThemeType": "THEME_SORTING_STRINGS",
+    "taskDifficultyType": "DIFFICULTY_HARD",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Sorting Strings Task 1"
+    ]
+  },
+  {
+    "title": "Sorting Strings Task 2",
+    "description": "Description for Sorting Strings Task 2",
+    "taskThemeType": "THEME_SORTING_STRINGS",
+    "taskDifficultyType": "DIFFICULTY_IMPOSSIBLE",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Sorting Strings Task 2"
+    ]
+  },
+  {
+    "title": "Sorting Custom Task 1",
+    "description": "Description for Sorting Custom Task 1",
+    "taskThemeType": "THEME_SORTING_CUSTOM",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Sorting Custom Task 1"
+    ]
+  },
+  {
+    "title": "Sorting Custom Task 2",
+    "description": "Description for Sorting Custom Task 2",
+    "taskThemeType": "THEME_SORTING_CUSTOM",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Sorting Custom Task 2"
+    ]
+  },
+  {
+    "title": "Recursion Factorial Task 1",
+    "description": "Description for Recursion Factorial Task 1",
+    "taskThemeType": "THEME_RECURSION_FACTORIAL",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Recursion Factorial Task 1"
+    ]
+  },
+  {
+    "title": "Recursion Factorial Task 2",
+    "description": "Description for Recursion Factorial Task 2",
+    "taskThemeType": "THEME_RECURSION_FACTORIAL",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Recursion Factorial Task 2"
+    ]
+  },
+  {
+    "title": "Recursion Fibonacci Task 1",
+    "description": "Description for Recursion Fibonacci Task 1",
+    "taskThemeType": "THEME_RECURSION_FIBONACCI",
+    "taskDifficultyType": "DIFFICULTY_HARD",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Recursion Fibonacci Task 1"
+    ]
+  },
+  {
+    "title": "Recursion Fibonacci Task 2",
+    "description": "Description for Recursion Fibonacci Task 2",
+    "taskThemeType": "THEME_RECURSION_FIBONACCI",
+    "taskDifficultyType": "DIFFICULTY_IMPOSSIBLE",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Recursion Fibonacci Task 2"
+    ]
+  },
+  {
+    "title": "Recursion Tree Traversal Task 1",
+    "description": "Description for Recursion Tree Traversal Task 1",
+    "taskThemeType": "THEME_RECURSION_TREE_TRAVERSAL",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Recursion Tree Traversal Task 1"
+    ]
+  },
+  {
+    "title": "Recursion Tree Traversal Task 2",
+    "description": "Description for Recursion Tree Traversal Task 2",
+    "taskThemeType": "THEME_RECURSION_TREE_TRAVERSAL",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Recursion Tree Traversal Task 2"
+    ]
+  },
+  {
+    "title": "Cache Optimization Task 1",
+    "description": "Description for Cache Optimization Task 1",
+    "taskThemeType": "THEME_OPTIMIZATION_CACHE",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Cache Optimization Task 1"
+    ]
+  },
+  {
+    "title": "Cache Optimization Task 2",
+    "description": "Description for Cache Optimization Task 2",
+    "taskThemeType": "THEME_OPTIMIZATION_CACHE",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Cache Optimization Task 2"
+    ]
+  },
+  {
+    "title": "Database Optimization Task 1",
+    "description": "Description for Database Optimization Task 1",
+    "taskThemeType": "THEME_OPTIMIZATION_DATABASE",
+    "taskDifficultyType": "DIFFICULTY_HARD",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Database Optimization Task 1"
+    ]
+  },
+  {
+    "title": "Database Optimization Task 2",
+    "description": "Description for Database Optimization Task 2",
+    "taskThemeType": "THEME_OPTIMIZATION_DATABASE",
+    "taskDifficultyType": "DIFFICULTY_IMPOSSIBLE",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Database Optimization Task 2"
+    ]
+  },
+  {
+    "title": "Algorithms Optimization Task 1",
+    "description": "Description for Algorithms Optimization Task 1",
+    "taskThemeType": "THEME_OPTIMIZATION_ALGORITHMS",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Algorithms Optimization Task 1"
+    ]
+  },
+  {
+    "title": "Algorithms Optimization Task 2",
+    "description": "Description for Algorithms Optimization Task 2",
+    "taskThemeType": "THEME_OPTIMIZATION_ALGORITHMS",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Algorithms Optimization Task 2"
+    ]
+  },
+  {
+    "title": "Arrays Min-Max Task 1",
+    "description": "Description for Arrays Min-Max Task 1",
+    "taskThemeType": "THEME_ARRAYS_MIN_MAX",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Arrays Min-Max Task 1"
+    ]
+  },
+  {
+    "title": "Arrays Min-Max Task 2",
+    "description": "Description for Arrays Min-Max Task 2",
+    "taskThemeType": "THEME_ARRAYS_MIN_MAX",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Arrays Min-Max Task 2"
+    ]
+  },
+  {
+    "title": "2D Arrays Task 1",
+    "description": "Description for 2D Arrays Task 1",
+    "taskThemeType": "THEME_ARRAYS_2D",
+    "taskDifficultyType": "DIFFICULTY_HARD",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for 2D Arrays Task 1"
+    ]
+  },
+  {
+    "title": "2D Arrays Task 2",
+    "description": "Description for 2D Arrays Task 2",
+    "taskThemeType": "THEME_ARRAYS_2D",
+    "taskDifficultyType": "DIFFICULTY_IMPOSSIBLE",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for 2D Arrays Task 2"
+    ]
+  },
+  {
+    "title": "Dynamic Arrays Task 1",
+    "description": "Description for Dynamic Arrays Task 1",
+    "taskThemeType": "THEME_ARRAYS_DYNAMIC",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Dynamic Arrays Task 1"
+    ]
+  },
+  {
+    "title": "Dynamic Arrays Task 2",
+    "description": "Description for Dynamic Arrays Task 2",
+    "taskThemeType": "THEME_ARRAYS_DYNAMIC",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Dynamic Arrays Task 2"
+    ]
+  },
+  {
+    "title": "Base64 Encoding Task 1",
+    "description": "Description for Base64 Encoding Task 1",
+    "taskThemeType": "THEME_ENCODING_BASE64",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for Base64 Encoding Task 1"
+    ]
+  },
+  {
+    "title": "Base64 Encoding Task 2",
+    "description": "Description for Base64 Encoding Task 2",
+    "taskThemeType": "THEME_ENCODING_BASE64",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for Base64 Encoding Task 2"
+    ]
+  },
+  {
+    "title": "AES Encryption Task 1",
+    "description": "Description for AES Encryption Task 1",
+    "taskThemeType": "THEME_ENCODING_AES",
+    "taskDifficultyType": "DIFFICULTY_HARD",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for AES Encryption Task 1"
+    ]
+  },
+  {
+    "title": "AES Encryption Task 2",
+    "description": "Description for AES Encryption Task 2",
+    "taskThemeType": "THEME_ENCODING_AES",
+    "taskDifficultyType": "DIFFICULTY_IMPOSSIBLE",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for AES Encryption Task 2"
+    ]
+  },
+  {
+    "title": "URL Encoding Task 1",
+    "description": "Description for URL Encoding Task 1",
+    "taskThemeType": "THEME_ENCODING_URL",
+    "taskDifficultyType": "DIFFICULTY_EASY",
+    "taskLevelType": "LEVEL_EGE",
+    "taskSolutions": [
+      "Solution for URL Encoding Task 1"
+    ]
+  },
+  {
+    "title": "URL Encoding Task 2",
+    "description": "Description for URL Encoding Task 2",
+    "taskThemeType": "THEME_ENCODING_URL",
+    "taskDifficultyType": "DIFFICULTY_MEDIUM",
+    "taskLevelType": "LEVEL_OGE",
+    "taskSolutions": [
+      "Solution for URL Encoding Task 2"
+    ]
+  }
+]

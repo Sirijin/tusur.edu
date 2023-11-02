@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20231609-add_table_task_level.xml-1" author="mokrovitskii">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="task_level"/>
+            </not>
+        </preConditions>
+
+        <comment>create table task_level</comment>
+
+        <createTable tableName="task_level">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(128)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20231609-add_table_task_level.xml-2" author="mokrovitskii">
+        <preConditions>
+            <sqlCheck expectedResult="0">
+                SELECT COUNT(*)
+                FROM public.task_level
+                WHERE name in ('LEVEL_EGE', 'LEVEL_OGE', 'LEVEL_UNKNOWN');
+            </sqlCheck>
+        </preConditions>
+
+        <comment>insert default difficulties</comment>
+
+        <insert tableName="task_level">
+            <column name="name" value="LEVEL_EGE"/>
+        </insert>
+        <insert tableName="task_level">
+            <column name="name" value="LEVEL_OGE"/>
+        </insert>
+        <insert tableName="task_level">
+            <column name="name" value="LEVEL_UNKNOWN"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
