@@ -3,7 +3,6 @@ package ru.tusur.edu.service.task;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tusur.edu.dto.TaskDto;
@@ -14,22 +13,21 @@ import ru.tusur.edu.entity.TaskLevel;
 import ru.tusur.edu.entity.TaskTheme;
 import ru.tusur.edu.mapper.TaskMapper;
 import ru.tusur.edu.repository.task.TaskRepository;
-import ru.tusur.edu.type.task.TaskCategoryType;
 import ru.tusur.edu.util.UserUtil;
 import ru.tusur.edu.web.packet.request.PageableRequest;
 import ru.tusur.edu.web.packet.request.TaskSolutionRequest;
+import ru.tusur.edu.web.packet.request.TestSolutionRequest;
+import ru.tusur.edu.web.packet.response.TaskSolutionResponse;
+import ru.tusur.edu.web.packet.response.TestSolutionResponse;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static ru.tusur.edu.type.task.TaskCategoryType.CATEGORY_UNKNOWN;
-import static ru.tusur.edu.type.task.TaskCategoryType.values;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class TaskService {
 
+    private static final Random random = new Random();
     private final TaskMapper taskMapper;
     private final TaskRepository taskRepository;
     private final TaskDifficultyService taskDifficultyService;
@@ -87,14 +85,14 @@ public class TaskService {
     }
 
     @SneakyThrows
-    public ResponseEntity<?> processUserSolution(Long taskId, TaskSolutionRequest request) {
+    public TaskSolutionResponse processUserSolution(Long taskId, TaskSolutionRequest request) {
         Task task = findOne(taskId);
 
         if (taskSolutionService.checkIfSolutionsAreCorrect(task, request)) {
             userTaskService.handleCorrectSolution(task, UserUtil.getUserId());
-            return ResponseEntity.ok("Решение верное!");
+            return new TaskSolutionResponse("Решение верное!");
         } else {
-            return ResponseEntity.ok("Решение неверное");
+            return new TaskSolutionResponse("Решение неверное");
         }
     }
 
@@ -105,57 +103,43 @@ public class TaskService {
 
     @SneakyThrows
     public TaskResponse generateChallengingTest(int tasksAmount) {
-        Long userId = UserUtil.getUserId();
-        List<TaskCategoryType> categoryTypes = Arrays.stream(values())
-                .filter(categoryType -> categoryType != CATEGORY_UNKNOWN)
-                .toList();
-
+        Set<Long> uniqueTaskIds = new HashSet<>();
+        List<TaskDto> taskDtos = new ArrayList<>();
+        while (uniqueTaskIds.size() < tasksAmount) {
+            TaskDto taskDto = getRandomTask();
+            if (uniqueTaskIds.add(taskDto.getId())) {
+                taskDtos.add(taskDto);
+            }
+        }
         return TaskResponse.builder()
-                .items(categoryTypes.stream()
-                        .map(categoryType -> {
-                            TaskTheme theme = findThemeWithFewestSolvedTasks(categoryType, userId);
-                            Task task = findRandomTaskInTheme(theme);
-                            return taskMapper.toDto(task);
-                        })
-                        .limit(tasksAmount)
-                        .collect(Collectors.toList()))
-                .total(tasksAmount).build();
+                .items(taskDtos)
+                .total(taskDtos.size())
+                .build();
     }
 
-    private TaskTheme findThemeWithFewestSolvedTasks(TaskCategoryType categoryType, Long userId) {
-        List<TaskTheme> themesInCategory = taskThemeService.findThemesInCategory(categoryType);
-
-        if (themesInCategory.isEmpty()) {
-            return null;
-        }
-
-        Map<TaskTheme, Long> themeToSolvedCount = new HashMap<>();
-
-        for (TaskTheme theme : themesInCategory) {
-            Long solvedCount = userTaskService.countSolvedTasksByUserIdAndTheme(userId, theme);
-            themeToSolvedCount.put(theme, solvedCount);
-        }
-        return Collections.min(
-                themeToSolvedCount.entrySet(),
-                Map.Entry.comparingByValue()
-        ).getKey();
+    public TaskDto getRandomTask() {
+        List<TaskDto> allTasks = taskRepository.findAll().stream().map(taskMapper::toDto).toList();
+        int randomIndex = random.nextInt(allTasks.size());
+        return allTasks.get(randomIndex);
     }
 
-    private Task findRandomTaskInTheme(TaskTheme theme) {
-        List<Task> tasksInTheme = taskRepository.findByTaskTheme(theme);
-        if (tasksInTheme.isEmpty()) {
-            return null;
+    @SneakyThrows
+    public TestSolutionResponse submitTest(TestSolutionRequest testSolutionRequest) {
+        int correctAnswersCount = 0;
+        Map<Long, String> solutions = testSolutionRequest.getSolutions();
+        for (Map.Entry<Long, String> entry : solutions.entrySet()) {
+            Long taskId = entry.getKey();
+            String userAnswer = entry.getValue();
+
+            Task task = findOne(taskId);
+            TaskSolutionRequest taskSolutionRequest = new TaskSolutionRequest(List.of(userAnswer));
+
+            if (taskSolutionService.checkIfSolutionsAreCorrect(task, taskSolutionRequest)) {
+                correctAnswersCount++;
+            }
         }
 
-        Random random = new Random();
-        int randomIndex = random.nextInt(tasksInTheme.size());
-
-        return tasksInTheme.get(randomIndex);
-    }
-
-    public Object submitTest() {
-
-        return null;
+        return new TestSolutionResponse(correctAnswersCount);
     }
 
     private void updateFields(TaskDto updatedDto, Task existingTask) {

@@ -1,7 +1,10 @@
 package ru.tusur.edu.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 import ru.tusur.edu.type.task.TaskDifficultyType;
 

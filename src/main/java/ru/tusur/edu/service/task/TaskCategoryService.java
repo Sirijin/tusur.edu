@@ -8,7 +8,7 @@ import ru.tusur.edu.entity.TaskCategory;
 import ru.tusur.edu.repository.task.TaskCategoryRepository;
 import ru.tusur.edu.type.task.TaskCategoryType;
 
-import static ru.tusur.edu.util.EnumUtil.*;
+import static ru.tusur.edu.util.EnumUtil.mapToEnumOrDefault;
 
 @Service
 @RequiredArgsConstructor

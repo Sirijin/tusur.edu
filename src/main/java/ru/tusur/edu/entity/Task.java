@@ -7,8 +7,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "task")
@@ -48,10 +48,10 @@ public class Task {
     private TaskLevel taskLevel;
 
     @OneToMany(mappedBy = "task", orphanRemoval = true)
-    private Set<TaskSolution> taskSolutions;
+    private List<TaskSolution> taskSolutions;
 
     @OneToMany(mappedBy = "task")
-    private Set<UserTask> userTasks;
+    private List<UserTask> userTasks;
 
     @Override
     public final boolean equals(Object o) {

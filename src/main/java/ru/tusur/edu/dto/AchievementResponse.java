@@ -1,6 +1,6 @@
 package ru.tusur.edu.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class AchievementResponse {
 
-    @NotNull
+    @NotEmpty
     private List<AchievementDto> items;
     private long total;
 }

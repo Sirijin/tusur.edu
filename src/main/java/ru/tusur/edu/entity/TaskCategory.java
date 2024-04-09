@@ -8,9 +8,8 @@ import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 import ru.tusur.edu.type.task.TaskCategoryType;
 
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "task_category")
@@ -29,7 +28,7 @@ public class TaskCategory {
     private TaskCategoryType name;
 
     @OneToMany(mappedBy = "taskCategory")
-    private Set<TaskTheme> taskThemes = new LinkedHashSet<>();
+    private List<TaskTheme> taskThemes;
 
     @Override
     public final boolean equals(Object o) {

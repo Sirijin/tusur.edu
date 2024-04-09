@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tusur.edu.security.entity.User;
 import ru.tusur.edu.security.service.UserService;
 
-import java.util.stream.Collectors;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -20,7 +18,7 @@ public class DailyActivityProcessor {
     public void processStuff() {
         userService.saveAll(userService.findAll().stream()
                 .map(this::processUserActivity)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     private User processUserActivity(User user) {

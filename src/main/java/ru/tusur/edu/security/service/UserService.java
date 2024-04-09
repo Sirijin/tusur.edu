@@ -121,6 +121,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(encodedPassword);
         user.setRole(role);
 
+        userRepository.save(user);
         UserDto userDto = mapper.toDto(user);
         return new RegisterResponse(userDto);
     }

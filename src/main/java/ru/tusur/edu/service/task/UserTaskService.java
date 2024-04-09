@@ -6,7 +6,6 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tusur.edu.entity.Task;
-import ru.tusur.edu.entity.TaskTheme;
 import ru.tusur.edu.entity.UserTask;
 import ru.tusur.edu.repository.task.TaskRepository;
 import ru.tusur.edu.repository.task.UserTaskRepository;
@@ -69,10 +68,5 @@ public class UserTaskService {
         userService.addBalance(user, difficultyType);
         userService.addActivity(user, difficultyType);
         userRepository.save(user);
-    }
-
-
-    public Long countSolvedTasksByUserIdAndTheme(Long userId, TaskTheme theme) {
-        return userTaskRepository.countByUserIdAndTaskTheme(userId, theme);
     }
 }

@@ -58,15 +58,15 @@ public class User implements UserDetails {
 
     @Column(name = "balance", nullable = false)
     @Builder.Default
-    private Integer balance = 0;
+    private int balance = 0;
 
     @Column(name = "daily_activity", nullable = false)
     @Builder.Default
-    private Double dailyActivity = 0.0;
+    private double dailyActivity = 0.0;
 
     @Column(name = "days_in_a_row", nullable = false)
     @Builder.Default
-    private Integer daysInARow = 0;
+    private int daysInARow = 0;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

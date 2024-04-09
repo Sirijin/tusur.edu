@@ -1,6 +1,7 @@
 package ru.tusur.edu.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -20,19 +21,19 @@ public class TaskDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @NotEmpty
+    @NotBlank
     private String title;
 
-    @NotEmpty
+    @NotBlank
     private String description;
 
-    @NotEmpty
+    @NotBlank
     private String taskThemeType;
 
-    @NotEmpty
+    @NotBlank
     private String taskDifficultyType;
 
-    @NotEmpty
+    @NotBlank
     private String taskLevelType;
 
     @NotEmpty

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskSolutionResponse {
+public class TestSolutionResponse {
 
-    private String something;
+    private Integer correctSolutionsCount;
 }

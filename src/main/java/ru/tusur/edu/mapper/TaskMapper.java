@@ -8,7 +8,6 @@ import ru.tusur.edu.entity.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TaskMapper {
@@ -22,10 +21,6 @@ public interface TaskMapper {
     @Mapping(target = "taskSolutions", expression = "java(mapTaskSolutions(entity.getTaskSolutions()))")
     TaskDto toDto(Task entity);
 
-    default String categoryToString(TaskCategory taskCategory) {
-        return taskCategory.getName().name();
-    }
-
     default String themeToString(TaskTheme taskTheme) {
         return taskTheme.getName().name();
     }
@@ -38,7 +33,7 @@ public interface TaskMapper {
         return taskLevel.getName().name();
     }
 
-    default List<String> mapTaskSolutions(Set<TaskSolution> taskSolutions) {
+    default List<String> mapTaskSolutions(List<TaskSolution> taskSolutions) {
         if (taskSolutions == null) {
             return Collections.emptyList();
         }

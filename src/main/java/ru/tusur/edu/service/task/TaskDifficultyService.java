@@ -8,7 +8,7 @@ import ru.tusur.edu.entity.TaskDifficulty;
 import ru.tusur.edu.repository.task.TaskDifficultyRepository;
 import ru.tusur.edu.type.task.TaskDifficultyType;
 
-import static ru.tusur.edu.util.EnumUtil.*;
+import static ru.tusur.edu.util.EnumUtil.mapToEnumOrDefault;
 
 @Service
 @RequiredArgsConstructor

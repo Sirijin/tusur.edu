@@ -1,7 +1,6 @@
 package ru.tusur.edu.web.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +15,7 @@ import ru.tusur.edu.dto.TaskResponse;
 import ru.tusur.edu.service.task.TaskService;
 import ru.tusur.edu.web.packet.request.PageableRequest;
 import ru.tusur.edu.web.packet.request.TaskSolutionRequest;
+import ru.tusur.edu.web.packet.request.TestSolutionRequest;
 
 import java.util.List;
 
@@ -85,7 +85,7 @@ public class TaskController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         taskService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Send TaskSolutionRequest on task by id", description = "Get tasks list and total count", responses = {
@@ -98,23 +98,23 @@ public class TaskController {
         return ResponseEntity.ok(taskService.processUserSolution(id, solution));
     }
 
-    @Operation(summary = "Send TaskSolutionRequest on task by id", description = "Get tasks list and total count", responses = {
+    @Operation(summary = "Generate test", description = "Generate test", responses = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TaskDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema)),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
     })
     @GetMapping("/test")
-    public ResponseEntity<?> generateChallengingTest(@RequestParam(required = false, defaultValue = "5") int tasksAmount) {
+    public ResponseEntity<?> generateChallengingTest(@RequestParam int tasksAmount) {
         return ResponseEntity.ok(taskService.generateChallengingTest(tasksAmount));
     }
 
-    @Operation(summary = "Send TaskSolutionRequest on task by id", description = "Get tasks list and total count", responses = {
+    @Operation(summary = "Submit test", description = "Submit test", responses = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = TaskDto.class))),
             @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema)),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
     })
     @PostMapping("/test")
-    public ResponseEntity<?> submitTest() {
-        return ResponseEntity.ok(taskService.submitTest());
+    public ResponseEntity<?> submitTest(TestSolutionRequest testSolutionRequest) {
+        return ResponseEntity.ok(taskService.submitTest(testSolutionRequest));
     }
 }
