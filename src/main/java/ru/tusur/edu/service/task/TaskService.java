@@ -126,6 +126,9 @@ public class TaskService {
     @SneakyThrows
     public TestSolutionResponse submitTest(TestSolutionRequest testSolutionRequest) {
         int correctAnswersCount = 0;
+        if (testSolutionRequest.getSolutions() == null || testSolutionRequest.getSolutions().isEmpty()) {
+            return new TestSolutionResponse(0);
+        }
         Map<Long, String> solutions = testSolutionRequest.getSolutions();
         for (Map.Entry<Long, String> entry : solutions.entrySet()) {
             Long taskId = entry.getKey();

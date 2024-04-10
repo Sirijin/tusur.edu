@@ -114,7 +114,7 @@ public class TaskController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
     })
     @PostMapping("/test")
-    public ResponseEntity<?> submitTest(TestSolutionRequest testSolutionRequest) {
+    public ResponseEntity<?> submitTest(@RequestBody TestSolutionRequest testSolutionRequest) {
         return ResponseEntity.ok(taskService.submitTest(testSolutionRequest));
     }
 }
